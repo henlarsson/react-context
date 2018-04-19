@@ -1,21 +1,47 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { ThemeContext, themes } from './theme-context';
+import ThemedButton from './themed-button';
 
-class App extends Component {
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.toggleTheme = () => {
+      this.setState(state => ({
+        theme:
+          state.theme === themes.red
+            ? themes.blue
+            : themes.red,
+      }));
+    };
+
+    this.state = {
+      theme: themes.blue,
+      toggleTheme: this.toggleTheme,
+    };
+  }
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <ThemeContext.Provider value={this.state}>
+          <Content />
+        </ThemeContext.Provider>
+        <div>
+          <ThemedButton>No context Theme
+          </ThemedButton>
+        </div>
       </div>
     );
   }
+}
+
+function Content() {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
 }
 
 export default App;
